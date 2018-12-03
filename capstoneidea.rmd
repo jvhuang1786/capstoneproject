@@ -1,0 +1,62 @@
+<center>
+####Capstone Idea 
+</center>
+
+##NBA player stats against NBA player salaries
+
+######By Justin Huang
+
+
+
+**1.	What is the problem you want to solve?**
+
+* Do NBA players statistics always match up with their salaries.  Does scoring more points, grabbing more rebounds having better advanced statistics always land a player a better contract?  What other external factors might go into an NBA contract.  I¡¯ll be exploring 20 years of NBA player data from the 2000 regular season to the current regular season. 
+
+* How much do other factors determine the players contract market:
+  
+    + A player playing for his next contract	
+    + How deep the free agency market is
+    + Player popularity in media
+    + Small market vs big market teams
+    + Did that player just have one good playoff series
+    + Player is injury prone
+
+**2. Who is your client and why do they care about this problem? In other words, what will your client DO or DECIDE based on your analysis that they wouldn¡¯t have otherwise?**
+
+*Clients will be NBA analysts, general managers, scouts or even NBA players who will be trying to evaluate NBA salaries.  They would use this as a reference point when starting salary negotiations.  
+
+
+**3. What data are you going to use for this? How will you acquire this data?**
+
+
+* The data will be acquired from basketball reference, a sit that contains NBA current and historical statistics.  
+
+* https://www.basketball-reference.com/
+
+* Data for player statistics can be easily obtained through csv files they provide for the regular seasons of 2000-2019.
+
+* NBA player salaries will have to be obtained using rvest since salaries are hidden within individual player pages on basketball reference. 
+
+**4. In brief, outline your approach to solving this problem (knowing that this might change later).**
+
+
+* Will have to run a multiple linear regression model that will explore different variables of an NBA player plotted against their salary. 
+
+* Such variables would include:
+
+    + Made an all-star team
+    + Team made the playoffs
+    + Points, rebounds, steals, assists
+    + NBA Player efficiency rating
+    + Offensive and defensive on/off ratings
+    + Final contract year
+    + Injured during regular season 
+    + Individual performances (all nba, defensive team, MVP etc¡­) 
+
+**5. What are your deliverables? Typically, this would include code, along with a paper and/or a slide deck.**
+
+* The deliverables will be an R script code containing the code used for data wrangling, data exploration and regression model.
+
+* The paper will be data story and visualization of NBA data against NBA salaries exploring other external factors explaining decreases or increases in NBA player salary.
+
+* A slide deck power point presentation that will conclude the findings.
