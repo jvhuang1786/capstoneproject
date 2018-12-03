@@ -1,0 +1,60 @@
+<center>
+####Capstone Idea 
+</center>
+
+##Digital Comic Sales and Distribution from Comixology an Amazon owned company
+
+######By Justin Huang
+
+
+
+**1.	What is the problem you want to solve?**
+
+* Digital comics have been trending since 2013.  Just on comiXology alone there have been 200 million downloads since then.   They offer up to 100,000 comic books, graphic novels and manga online.   With the information provided online I will dive into and explore the data on recent comic trends. 
+
+* Such trends and analysis include:
+  
+    + Bestselling genre	
+    + Reviews for comics
+    + Number of downloads
+    + Avg price of a comic 
+    + Marvel vs DC comics a battle of titans 
+    + Age bracket and general trends in digital comics
+
+**2. Who is your client and why do they care about this problem? In other words, what will your client DO or DECIDE based on your analysis that they wouldn¡¯t have otherwise?**
+
+*Clients will be comics writers, publishers and possibly movie producers who wish to use comic intellectual property and make it into a movie if a certain comic is trending.   Based on the genre that is most popular, sales and an analysis on age brackets it will give them a more complete picture of what their audience wants and what potential audience markets are untapped.  As well as give information of the current landscape of digital comics. 
+
+
+**3. What data are you going to use for this? How will you acquire this data?**
+
+
+* All data will be acquired from comiXology.
+\
+
+<center> https://www.comixology.com </center>
+\
+
+* The challenge will be using rvest to webscrap relevant data that will help with the analysis.  
+
+**4. In brief, outline your approach to solving this problem (knowing that this might change later).**
+
+
+* Will have to run a multiple linear regression model, histograms or boxplots to determine general trends and sales of digital comics. 
+
+* Analysis would include:
+
+    + Avg range of price of different comics
+    + How long was a comic a best seller
+    + Marvel vs DC comics a look at their sales and which company performed better
+    + Mean price of comics for writers to determine a price point for their comics
+    + avg ratings for different genres and publishers of comics
+    
+
+**5. What are your deliverables? Typically, this would include code, along with a paper and/or a slide deck.**
+
+* The deliverables will be an R script code containing the code used for data wrangling, data exploration as well as data that is visualized through a regression analysis and other statistical charts.
+
+* The paper will be data story and visualization of digital comics exploring which comics were trending, which got the best ratings, information about Marvel and DC, different price points for comics, untapped markets that writers and publishers could explore. 
+
+* A slide deck power point presentation that will conclude the findings.
