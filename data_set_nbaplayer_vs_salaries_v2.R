@@ -697,6 +697,7 @@ test_data_2019$salary <- str_replace(test_data_2019$salary, "\\$", "")
 test_data_2019$salary <- str_replace_all(test_data_2019$salary, ",", "")
 test_data_2019$salary <- as.numeric(test_data_2019$salary)
 
+
 #probably have to change other data into numerics when doing data exploration to summarize them into other advanced statistics 
 names(test_data_2019)
 #test_data_2019$WEIGHT <- as.numeric(test_data_2019$WEIGHT)
@@ -709,6 +710,15 @@ View(data_2019$player_name & which(is.na(data_2019$AGE)))
 #now time to fill in missing NAs for stats
 sum(is.na(data_2019$PS.G))
 which(is.na(data_2019$PS.G))
+
+#have to add inflation in for 2019
+test_data_2019 <- cbind(inflation_2019 = 2.5, test_data_2019)
+#have to add the tax per location in 2019 
+test_data_2019 <- left_join(test_data_2019,tax, by = "TEAM")
+
+#do a test write up of the csv as version 1
+
+write.csv(test_data_2019, file = "2019_incomplete_nba_data_v1.csv")
 #Match 2018
 
 #Match 2017
