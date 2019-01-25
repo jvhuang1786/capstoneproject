@@ -1,0 +1,256 @@
+---
+title: "NBA Machine Learning"
+author: "Justin Huang"
+date: "1/25/2019"
+output:   
+  html_document:
+    keep_md: yes
+  pdf_document: default
+---
+
+Loaded in the library 
+```{r message = FALSE}
+library(dplyr)
+library(ggplot2)
+library(ggrepel)
+library(directlabels)
+library(gridExtra)
+options(max.print = 999999999)
+options(scipen=12)
+```
+
+Loaded in the data
+```{r echo = FALSE}
+#set directory 
+getwd()
+setwd("/users/justinvhuang/desktop/nba_stat_salaries")
+getwd()
+
+#loading in the data
+data<-read.csv("2000_2018_nba.csv")
+data <- data[,-1]
+``` 
+
+
+Looked at the data
+
+```{r results = FALSE}
+glimpse(data)
+head(data)
+names(data)
+summary(data)
+str(data)
+```
+
+Exploring the different correlation among NBA Data 
+
+```{r results = FALSE}
+cor(data[, sapply(data, is.numeric)],
+    use = "complete.obs", method = "pearson")
+```
+
+##Visulizaing and performing linear and multiple linear regression anaylsis 
+
+###Team wins and salary
+```{r echo = FALSE}
+ggplot(data,aes(TeamWins,salary)) +
+  geom_point() + 
+  facet_wrap(~PlayerYear) +
+  ggtitle("Scatter Plot of TeamWins predicting Salary")
+
+ggplot(data,aes(TeamWins,salary)) +
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE) +
+  ggtitle("Scatter Plot of TeamWins predicting Salary")
+#Taking a look at the data 
+data %>% summarize(N =n(), mean(TeamWins), sd(TeamWins), 
+                                            mean(salary), sd(salary), cor(TeamWins,salary))
+```
+
+There doesn't seem to be any correlation or a strong correlation with team wins and salary at all.  The correlation is really low at 0.134.  Also the standard deviation is higher than the mean for the salry.  I think the reasoning behind this is that since teams have to fill in a cap every year they might sign players to big contracts but this might not equate to wins.  
+
+
+```{r echo = FALSE}
+#Lets make a linear model 
+lm.win.sal <- lm(salary ~ TeamWins, data = data)
+lm.win.sal
+summary(lm.win.sal)
+coef(summary(lm.win.sal))
+anova(lm.win.sal)
+SSE0 = sum(lm.win.sal$residuals^2)
+#SSE0
+```
+
+RMSE
+
+```{r echo = FALSE}
+RMSE0 = sqrt(SSE0/nrow(data))
+RMSE0
+```
+
+Team wins loooks to be significant with a low P value and high F stat.  However the Adjusted R squared is really low  at 0.01784.  RMSE is high but relative to the mean salary not to bad. 
+
+
+Player Year and Team salary
+
+```{r echo = FALSE}
+
+
+ggplot(data,aes(PlayerYear,tmsalary)) +
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE) +
+  ggtitle("Scatter Plot of Player and Team Salary")
+#Taking a look at the data 
+data %>% summarize(N =n(), mean(PlayerYear), sd(PlayerYear), 
+                   mean(tmsalary), sd(tmsalary), cor(PlayerYear,tmsalary))
+```
+
+There is a strong correlation of 0.676 with Player year and team salary.  And this is evidence so far since the new CBA agreement and the increase in team salary over the years.  
+
+```{r echo = FALSE}
+#Lets make a linear model 
+lm.py.tmsal <- lm(tmsalary ~ PlayerYear, data = data)
+lm.py.tmsal
+summary(lm.py.tmsal)
+coef(summary(lm.py.tmsal))
+anova(lm.py.tmsal)
+SSE1 = sum(lm.py.tmsal$residuals^2)
+#SSE1
+```
+
+RMSE
+
+```{r echo = FALSE}
+RMSE1 = sqrt(SSE1/nrow(data))
+RMSE1
+```
+
+High F Stat and adjusted R squared is 0.4574 which is pretty good.  Also a low p value showing that the findings are significant.  
+
+Team Salary and Salary Cap 
+
+```{r echo = FALSE}
+##team salary and salary cap 
+ggplot(data,aes(tmsalary,SalCap)) +
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE) +
+  ggtitle("Scatter Plot of Team Salary and Salary Cap")
+#Taking a look at the data 
+data %>% summarize(N =n(), mean(tmsalary), sd(tmsalary), 
+                   mean(SalCap), sd(SalCap), cor(tmsalary,SalCap))
+```
+
+There is a high correlation with team salary and salary cap as expected. Which is 0.787 rounded. 
+
+```{r echo = FALSE}
+
+#Lets make a linear model 
+lm.tmsal.salcap <- lm(tmsalary~ SalCap, data = data)
+lm.tmsal.salcap
+summary(lm.tmsal.salcap)
+coef(summary(lm.tmsal.salcap))
+anova(lm.tmsal.salcap)
+SSE2 = sum(lm.tmsal.salcap$residuals^2)
+SSE2
+RMSE2 = sqrt(SSE2/nrow(data))
+RMSE2
+```
+
+
+The adjusted R squared is high at 0.6187 so salary cap of course does a good job explaining team salary. 
+P value and F stat show that the relationship is significant.  
+
+
+Multiple Linear Regression Analysis
+
+```{r results= FALSE}
+#Lets look at a few of the highest correlations make a multiple linear regression 
+#Age, t_reb, TO, PPG, FG, started games, three, two, assist, block,steal,EFG, Num years
+cor(data$Age,data$salary)
+cor(data$t_reb,data$salary)
+cor(data$TO,data$salary)
+cor(data$ppg,data$salary)
+cor(data$FG,data$salary)
+cor(data$started,data$salary)
+cor(data$three, data$salary)
+cor(data$two, data$salary)
+cor(data$assist,data$salary)
+cor(data$block, data$salary)
+cor(data$steal,data$salary)
+cor(data$EFG,data$salary)
+cor(data$NumYears,data$salary)
+```
+
+The highest correlations with Salary are TO(0.51), PPG(0.59), FG(0.59),started(0.48),two(0.56).
+While the weakest correlation was EFG at 0.19.
+
+```{r echo = FALSE}
+#Lets make a multiple linear regression model
+lmodel<- lm(salary~Age + t_reb + TO + ppg+ FG+ 
+              started+three+two+assist+block, +steal+EFG +NumYears, data=data)
+lmodel
+summary(lmodel)
+coef(summary(lmodel))
+anova(lmodel)
+SSE3 = sum(lmodel$residuals^2)
+#SSE3
+```
+
+RMSE
+
+```{r echo = FALSE}
+RMSE3 = sqrt(SSE3/nrow(data))
+RMSE3
+#adjusted R squared looks good however we could be dealing with multiple colinieartiy with Age and number of years played
+```
+
+
+The Adjusted R squared is at 0.9116 which is good.  But we might be dealing with multicollinearity with twos, threes and AGE.  Age being related to number of years played while twos and threes related to field goals.  Lets try removing them to see if this improves the model.  
+
+
+```{r echo = FALSE}
+#lets remove the weakest correlation of EFG assists since it did not show significant
+#and Age, two and three to see if it improves the model 
+lmodel2<- lm(salary~t_reb + TO + ppg+ FG+ 
+              started+block, +steal +NumYears, data=data)
+lmodel2
+summary(lmodel2)
+coef(summary(lmodel2))
+anova(lmodel2)
+SSE4 = sum(lmodel2$residuals^2)
+SSE4
+RMSE4 = sqrt(SSE4/nrow(data))
+RMSE4
+```
+
+The adjusted r squared got worst and fell to 0.8715 so lets try adding the variables back but just removing EFG the weakest correlation from the group. 
+
+
+```{r echo = FALSE}
+#Lets add back in some of the values and just remove the lowest correlation 
+lmodel3<- lm(salary~t_reb + TO + ppg+ FG+ Age +
+              started+three+two+assist+block, +steal+NumYears, data=data)
+lmodel3
+summary(lmodel3)
+coef(summary(lmodel3))
+anova(lmodel3)
+SSE5 = sum(lmodel3$residuals^2)
+SSE5
+RMSE5 = sqrt(SSE5/nrow(data))
+RMSE5
+``` 
+
+So the adjusted R squared got better and went to 0.9152.  There is a high F stastic and low p value.  
+
+
+Conclusion:
+
+
+So overall what we wanted to explore was how well the statistics in the NBA explained salary.  To see if moneyball for baseball could work for basketball.  With the last multiple linear regression model we got a adjusted R squared that takes account of the variables of 0.9152.  
+
+According to these statstics and high adjusted R value as we well as a low RMSE compared to the mean 793126, high F stat and low p value.  These variables do a good job of explaining salary.  However, it is important to explore that the NBA entered 3 different CBA contract and this might affect the data.  Also, with the new endorsements and the rise of social media and global awareness and faster flow of money this all might affect it.  
+
+The technique we used was supervised learning with linear and multiple linear regression.  The metric we looked at was the adjusted R squared, F statistic, P value and RMSE. 
+
+A higher Adjusted R squared, high F Stat, low P value and low RMSE is what we are looking for. 
+
